@@ -4,24 +4,20 @@
 
 | Step | Lives in | Action |
 |------|----------|--------|
-| 1 | GitHub | Someone comments `/a11y` on a PR |
+| 1 | GitHub | Developer comments `/a11y` on a PR |
 | 2 | GitHub App | Detects the comment, extracts repo, branch, PR number, commit SHA |
-| 3 | GitHub App | Clones the repo at the correct branch/commit |
-| 4 | GitHub App | Installs dependencies and starts the app |
-| 5 | GitHub App | Waits for localhost:3000 to respond |
-| 6 | GitHub App → Claude Code Server | Sends audit job: `{ localPath, baseUrl }` |
-| 7 | Claude Code Server | Runs audit: DOM scan + code scan + analyzer → generates remediation.md |
-| 8 | Claude Code Server → GitHub App | Returns `{ jobId, findings }` |
-| 9 | GitHub App | Posts comment on PR with issue list |
-| 10 | GitHub | Reviewer replies with a fix command |
-| 11 | GitHub App | Detects the command (e.g. `/a11y fix A1 A3`) |
-| 12 | GitHub App | Resolves which issues to fix |
-| 13 | GitHub App → Claude Code Server | Sends fix job: `{ jobId, fixes: [A1, A3] }` |
-| 14 | Claude Code Server | Reads remediation.md, applies only the approved fixes |
-| 15 | Claude Code Server | Runs re-scan to verify fixes |
-| 16 | Claude Code Server → GitHub App | Returns `{ summary, changedFiles }` |
-| 17 | GitHub App | Commits changes, pushes to new branch, opens fix PR |
-| 18 | GitHub App | Posts final comment in original PR |
+| 3 | GitHub App | Clones repo, installs dependencies, starts app & waits for localhost:3000 |
+| 4 | GitHub App → Claude Code Server | Sends audit job: `{ localPath, baseUrl }` |
+| 5 | Claude Code Server | Runs a11y skill → generates remediation.md |
+| 6 | Claude Code Server → GitHub App | Returns `{ jobId, findings }` |
+| 7 | GitHub App | Posts comment on PR with issue list |
+| 8 | GitHub | Reviewer replies with a fix command (e.g. `/a11y fix A1 A3`, `/a11y fix safe-only`) |
+| 9 | GitHub App | Detects fix command & resolves which issues to fix |
+| 10 | GitHub App → Claude Code Server | Sends fix job: `{ jobId, fixes: [A1, A3] }` |
+| 11 | Claude Code Server | Runs a11y skill, applies approved fixes & re-scans to verify |
+| 12 | Claude Code Server → GitHub App | Returns `{ summary, changedFiles }` |
+| 13 | GitHub App | Commits changes, pushes to new branch, opens fix PR |
+| 14 | GitHub App | Posts final comment in original PR |
 
 ---
 
